@@ -5,13 +5,13 @@
 SPEC_BEGIN(CircularDependencySpecs)
 describe(@"circular dependencies", ^{
       beforeEach(^{
-            JSObjectionInjector *injector = [JSObjection createInjector];
-            [JSObjection setDefaultInjector:injector];
+            ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
+            [ApplauseJSObjection setDefaultInjector:injector];
       });
 
       it(@"are resolved between singletons", ^{
-            SingletonFoo *foo = [[JSObjection defaultInjector] getObject:[SingletonFoo class]];
-            SingletonBar *bar = [[JSObjection defaultInjector] getObject:[SingletonBar class]];
+            SingletonFoo *foo = [[ApplauseJSObjection defaultInjector] getObject:[SingletonFoo class]];
+            SingletonBar *bar = [[ApplauseJSObjection defaultInjector] getObject:[SingletonBar class]];
 
             assertThat(foo, is(sameInstance(bar.foo)));
             assertThat(foo.bar, is(sameInstance(bar)));

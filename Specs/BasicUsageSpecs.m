@@ -4,24 +4,24 @@
 
 SPEC_BEGIN(BasicUsageSpecs)
 beforeEach(^{
-      JSObjectionInjector *injector = [JSObjection createInjector];
-      [JSObjection setDefaultInjector:injector];
+      ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
+      [ApplauseJSObjection setDefaultInjector:injector];
 });
 
 it(@"correctly builds a registered object", ^{
-    id engine = [[JSObjection defaultInjector] getObject:[Engine class]];
+    id engine = [[ApplauseJSObjection defaultInjector] getObject:[Engine class]];
       
     assertThat(engine, isNot(nilValue()));
 });
 
 it(@"will auto register a class if it is not explicitly registered", ^{
-    UnregisteredCar *unregisteredCar = [[JSObjection defaultInjector] getObject:[UnregisteredCar class]];
+    UnregisteredCar *unregisteredCar = [[ApplauseJSObjection defaultInjector] getObject:[UnregisteredCar class]];
     assertThat(unregisteredCar, is(notNilValue()));
     assertThat(unregisteredCar.engine, is(notNilValue()));
 });
 
 it(@"correctly builds and object with dependencies", ^{
-    Car *car = [[JSObjection defaultInjector] getObject:[Car class]];
+    Car *car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
 
     assertThat(car, isNot(nilValue()));
 
@@ -33,7 +33,7 @@ it(@"correctly builds and object with dependencies", ^{
 });
 
 it(@"correctly builds objects with selector dependencies", ^{
-    UnstoppableCar *car = [[JSObjection defaultInjector] getObject:[UnstoppableCar class]];
+    UnstoppableCar *car = [[ApplauseJSObjection defaultInjector] getObject:[UnstoppableCar class]];
 
     assertThat(car.engine, is(instanceOf([Engine class])));
 });
@@ -44,7 +44,7 @@ it(@"will inject dependencies into properties of an existing instance", ^{
     assertThat(car.engine, is(nilValue()));
     assertThat(car.brakes, is(nilValue()));
 
-    [[JSObjection defaultInjector] injectDependencies:car];
+    [[ApplauseJSObjection defaultInjector] injectDependencies:car];
 
     assertThat(car.engine, isNot(nilValue()));
     assertThat(car.engine, is(instanceOf([Engine class])));
@@ -56,29 +56,29 @@ it(@"will inject dependencies into properties of an existing instance", ^{
 it(@"calls awakeFromObjection when injecting dependencies into properties of an existing instance", ^{
     Car *car = [[Car alloc] init];
     
-    [[JSObjection defaultInjector] injectDependencies:car];
+    [[ApplauseJSObjection defaultInjector] injectDependencies:car];
 
     assertThatBool([car awake], equalToBool(YES));
     assertThatBool([car.engine awake], equalToBool(YES));
 });
 
 it(@"defaults to returning a new instance", ^{
-      id thomas = [[JSObjection defaultInjector] getObject:[Engine class]];
-      id gordan = [[JSObjection defaultInjector] getObject:[Engine class]];
+      id thomas = [[ApplauseJSObjection defaultInjector] getObject:[Engine class]];
+      id gordan = [[ApplauseJSObjection defaultInjector] getObject:[Engine class]];
       
       assertThat(thomas, isNot(sameInstance(gordan)));
 });
 
 it(@"supports the subscript operator", ^{
-    Car *car = [JSObjection defaultInjector][[Car class]];
+    Car *car = [ApplauseJSObjection defaultInjector][[Car class]];
     
     assertThat(car, isNot(nilValue()));
     assertThat(car.engine, is(instanceOf([Engine class])));
 });
 
 it(@"will return the same instance if it is registered as a singleton", ^{
-      id carFactory1 = [[JSObjection defaultInjector] getObject:[CarFactory class]];
-      id carFactory2 = [[JSObjection defaultInjector] getObject:[CarFactory class]];
+      id carFactory1 = [[ApplauseJSObjection defaultInjector] getObject:[CarFactory class]];
+      id carFactory2 = [[ApplauseJSObjection defaultInjector] getObject:[CarFactory class]];
       
       assertThat(carFactory1, isNot(nilValue()));
       assertThat(carFactory1, is(sameInstance(carFactory2)));
@@ -86,29 +86,29 @@ it(@"will return the same instance if it is registered as a singleton", ^{
 
 it(@"ensures that singletons are properly registered even if they have not been referenced", ^{
       // Ensure that the class is initialized before attempting to retrieve it.  
-      id holder1 = [[JSObjection defaultInjector] getObject:[SingletonItemHolder class]];
-      id holder2 = [[JSObjection defaultInjector] getObject:[SingletonItemHolder class]];  
+      id holder1 = [[ApplauseJSObjection defaultInjector] getObject:[SingletonItemHolder class]];
+      id holder2 = [[ApplauseJSObjection defaultInjector] getObject:[SingletonItemHolder class]];
       
       assertThat([holder1 singletonItem], is(sameInstance([holder2 singletonItem])));
 });
 
 it(@"will not return the same instance per injector if object is a singleton", ^{
-      id carFactory1 = [[JSObjection defaultInjector] getObject:[CarFactory class]];
-      id carFactory2 = [[JSObjection createInjector] getObject:[CarFactory class]];
+      id carFactory1 = [[ApplauseJSObjection defaultInjector] getObject:[CarFactory class]];
+      id carFactory2 = [[ApplauseJSObjection createInjector] getObject:[CarFactory class]];
       assertThat(carFactory1, isNot(sameInstance(carFactory2)));
 });
 
 it(@"returns nil if the class is nil", ^{
-    assertThat([[JSObjection defaultInjector] getObject:nil], is(nilValue()));
+    assertThat([[ApplauseJSObjection defaultInjector] getObject:nil], is(nilValue()));
 });
 
 it(@"doesn't blow up if a nil class is passed into register", ^{
-    [JSObjection registerClass:nil scope:JSObjectionScopeSingleton];
+    [ApplauseJSObjection registerClass:nil scope:ApplauseJSObjectionScopeSingleton];
 });
 
 it(@"calls awakeFromObjection when an object has been constructed", ^{
-      id engine = [[JSObjection defaultInjector] getObject:[Engine class]];
-      id car = [[JSObjection defaultInjector] getObject:[Car class]];
+      id engine = [[ApplauseJSObjection defaultInjector] getObject:[Engine class]];
+      id car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
 
       assertThatBool([engine awake], equalToBool(YES));
       assertThatBool([car awake], equalToBool(YES));
@@ -116,9 +116,9 @@ it(@"calls awakeFromObjection when an object has been constructed", ^{
 
 
 describe(@"object factory", ^{
-    it(@"injector returns a JSObjectFactory for the given injector context", ^{
-        JSObjectionInjector *injector1 = [JSObjection createInjector];
-        JSObjectionInjector *injector2 = [JSObjection defaultInjector];
+    it(@"injector returns a ApplauseJSObjectFactory for the given injector context", ^{
+        ApplauseJSObjectionInjector *injector1 = [ApplauseJSObjection createInjector];
+        ApplauseJSObjectionInjector *injector2 = [ApplauseJSObjection defaultInjector];
         
         JSObjectFactoryHolder *holder1 = [injector1 getObject:[JSObjectFactoryHolder class]];
         JSObjectFactoryHolder *holder2 = [injector2 getObject:[JSObjectFactoryHolder class]];
@@ -130,8 +130,8 @@ describe(@"object factory", ^{
     });    
     
     it(@"can take variadic arguments and pass them along to the injector", ^{
-        JSObjectionInjector *injector = [JSObjection defaultInjector];
-        JSObjectFactory *factory = [injector getObject:[JSObjectFactory class]];
+        ApplauseJSObjectionInjector *injector = [ApplauseJSObjection defaultInjector];
+        ApplauseJSObjectFactory *factory = [injector getObject:[ApplauseJSObjectFactory class]];
         
         ConfigurableCar *car = [factory getObjectWithArgs:[ConfigurableCar class], @"Model", @"Power", @"Year", nil];
         

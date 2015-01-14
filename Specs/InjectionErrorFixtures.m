@@ -1,22 +1,22 @@
 #import "InjectionErrorFixtures.h"
-#import "Objection.h"
+#import "ApplauseObjection.h"
 
 @implementation UnsupportedPropertyObject
-objection_register(UnsupportedPropertyObject)
-objection_requires(@"myInteger")
+apl_objection_register(UnsupportedPropertyObject)
+apl_objection_requires(@"myInteger")
 @synthesize myInteger;
 
 @end
 
 @implementation BadPropertyObject
 @synthesize someObject;
-objection_register(BadPropertyObject)
-objection_requires(@"badProperty")
+apl_objection_register(BadPropertyObject)
+apl_objection_requires(@"badProperty")
 @end
 
 @implementation ReadOnlyPropertyObject
-objection_register(ReadOnlyPropertyObject)
-objection_requires(@"someObject")
+apl_objection_register(ReadOnlyPropertyObject)
+apl_objection_requires(@"someObject")
 
 @synthesize someObject=_someObject;
 @end

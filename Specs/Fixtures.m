@@ -1,9 +1,9 @@
 #import "Fixtures.h"
-#import "Objection.h"
+#import "ApplauseObjection.h"
 #import "CircularDependencyFixtures.h"
 
 @implementation Engine
-objection_register(Engine)
+apl_objection_register(Engine)
 @synthesize awake;
 
 - (void) awakeFromObjection {
@@ -17,7 +17,7 @@ objection_register(Engine)
 
 
 @implementation Car
-objection_register(Car)
+apl_objection_register(Car)
 
 @synthesize engine, brakes, awake;
 
@@ -25,55 +25,55 @@ objection_register(Car)
   awake = YES;
 }
 
-objection_requires(@"engine", @"brakes")
+apl_objection_requires(@"engine", @"brakes")
 @end
 
 @implementation UnregisteredCar
-objection_requires(@"engine")
+apl_objection_requires(@"engine")
 @synthesize engine;
 @end
 
 @implementation FiveSpeedCar
-objection_register(FiveSpeedCar)
+apl_objection_register(FiveSpeedCar)
 
 @synthesize gearBox;
 
-objection_requires(@"gearBox")
+apl_objection_requires(@"gearBox")
 @end
 
 @implementation SixSpeedCar
-objection_register(SixSpeedCar)
+apl_objection_register(SixSpeedCar)
 @synthesize gearBox;
 @end
 
 @implementation CarFactory
-objection_register_singleton(CarFactory)
+apl_objection_register_singleton(CarFactory)
 @end
 
 @implementation SingletonItemHolder
 @synthesize singletonItem;
-objection_register(SingletonItemHolder)
-objection_requires(@"singletonItem")
+apl_objection_register(SingletonItemHolder)
+apl_objection_requires(@"singletonItem")
 @end
 
 @implementation SingletonItem
-objection_register_singleton(SingletonItem)
+apl_objection_register_singleton(SingletonItem)
 @end
 
 @implementation JSObjectFactoryHolder
-objection_register_singleton(JSObjectFactoryHolder)
-objection_requires(@"objectFactory")
+apl_objection_register_singleton(JSObjectFactoryHolder)
+apl_objection_requires(@"objectFactory")
 
 @synthesize objectFactory;
 @end
 
 @implementation SingletonFoo
-objection_register_singleton(SingletonFoo)
-objection_requires(@"bar")
+apl_objection_register_singleton(SingletonFoo)
+apl_objection_requires(@"bar")
 
 @synthesize bar;
 @end
 
 @implementation UnstoppableCar
-objection_requires_sel(@selector(engine))
+apl_objection_requires_sel(@selector(engine))
 @end

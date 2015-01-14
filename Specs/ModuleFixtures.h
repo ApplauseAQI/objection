@@ -27,7 +27,7 @@ extern BOOL gEagerSingletonHook;
 @interface EagerSingleton : NSObject
 @end
 
-@interface MyModule : JSObjectionModule
+@interface MyModule : ApplauseJSObjectionModule
 {
   BOOL _instrumentInvalidEagerSingleton;
   BOOL _instrumentInvalidMetaClass;
@@ -41,16 +41,16 @@ extern BOOL gEagerSingletonHook;
 - (id)initWithEngine:(Engine *)engine andGearBox:(id<GearBox>)gearBox;
 @end
 
-@interface CarProvider : NSObject<JSObjectionProvider>
+@interface CarProvider : NSObject<ApplauseJSObjectionProvider>
 @end
 
-@interface GearBoxProvider : NSObject<JSObjectionProvider>
+@interface GearBoxProvider : NSObject<ApplauseJSObjectionProvider>
 @end
 
-@interface ProviderModule : JSObjectionModule
+@interface ProviderModule : ApplauseJSObjectionModule
 @end
 
-@interface BlockModule : JSObjectionModule
+@interface BlockModule : ApplauseJSObjectionModule
 
 @property (nonatomic, assign) BOOL instrumentNilBlock;
 
@@ -74,21 +74,21 @@ extern BOOL gEagerSingletonHook;
 @property (nonatomic, strong) CreditCardValidator *validator;
 @end
 
-@interface FirstModule : JSObjectionModule
+@interface FirstModule : ApplauseJSObjectionModule
 @end
 
-@interface SecondModule : JSObjectionModule
+@interface SecondModule : ApplauseJSObjectionModule
 @end
 
-@interface ScopeModule : JSObjectionModule
-
-@end
-
-@interface BlockScopeModule : JSObjectionModule
+@interface ScopeModule : ApplauseJSObjectionModule
 
 @end
 
-@interface ProviderScopeModule : JSObjectionModule
+@interface BlockScopeModule : ApplauseJSObjectionModule
+
+@end
+
+@interface ProviderScopeModule : ApplauseJSObjectionModule
 
 @end
 

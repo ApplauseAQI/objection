@@ -1,10 +1,10 @@
-#import "JSObjectFactory.h"
-#import "Objection.h"
+#import "ApplauseJSObjectFactory.h"
+#import "ApplauseObjection.h"
 
-@implementation JSObjectFactory
+@implementation ApplauseJSObjectFactory
 @synthesize injector = _injector;
 
-- (id)initWithInjector:(JSObjectionInjector *)injector {
+- (id)initWithInjector:(ApplauseJSObjectionInjector *)injector {
     if ((self = [super init])) {
         _injector = injector;
     }

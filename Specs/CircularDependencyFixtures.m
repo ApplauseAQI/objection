@@ -1,10 +1,10 @@
-#import "Objection.h"
+#import "ApplauseObjection.h"
 #import "CircularDependencyFixtures.h"
 #import "Fixtures.h"
 
 @implementation SingletonBar
-objection_register_singleton(SingletonBar)
-objection_requires(@"foo")
+apl_objection_register_singleton(SingletonBar)
+apl_objection_requires(@"foo")
 
 @synthesize foo;
 @end

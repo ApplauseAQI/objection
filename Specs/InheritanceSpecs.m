@@ -9,8 +9,8 @@
 @end
 
 @implementation Person
-objection_register(Person)
-objection_requires(@"attributes")
+apl_objection_register(Person)
+apl_objection_requires(@"attributes")
 @synthesize attributes=_attributes;
 @end
 
@@ -22,8 +22,8 @@ objection_requires(@"attributes")
 @end
 
 @implementation Programmer
-objection_register(Programmer)
-objection_requires(@"favoriteLanguages")
+apl_objection_register(Programmer)
+apl_objection_requires(@"favoriteLanguages")
 @synthesize favoriteLanguages=_favoriteLanguages;
 
 @end
@@ -38,8 +38,8 @@ objection_requires(@"favoriteLanguages")
 @end
 
 @implementation NoInheritance
-objection_register(NoInheritance)
-objection_requires(@"something")
+apl_objection_register(NoInheritance)
+apl_objection_requires(@"something")
 
 @synthesize something=_something;
 
@@ -48,19 +48,19 @@ objection_requires(@"something")
 
 SPEC_BEGIN(InheritanceSpecs)
 beforeEach(^{
-      JSObjectionInjector *injector = [JSObjection createInjector];
-      [JSObjection setDefaultInjector:injector];
+      ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
+      [ApplauseJSObjection setDefaultInjector:injector];
 });
 
 it(@"coalesces dependencies from parent to child", ^{
-      Programmer *programmer = [[JSObjection defaultInjector] getObject:[Programmer class]];
+      Programmer *programmer = [[ApplauseJSObjection defaultInjector] getObject:[Programmer class]];
       assertThat(programmer, is(notNilValue()));
       assertThat(programmer.favoriteLanguages, is(notNilValue()));
       assertThat(programmer.attributes, is(notNilValue()));
 });
 
 it(@"does not throw a fit if the base class does not implement .objectionRequires", ^{
-      NoInheritance *noParentObjectWithRequires = [[JSObjection defaultInjector] getObject:[NoInheritance class]];
+      NoInheritance *noParentObjectWithRequires = [[ApplauseJSObjection defaultInjector] getObject:[NoInheritance class]];
       assertThat(noParentObjectWithRequires.something, is(notNilValue()));
 });
 SPEC_END

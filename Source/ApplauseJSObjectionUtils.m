@@ -1,14 +1,14 @@
 #import <objc/runtime.h>
-#import "JSObjectionUtils.h"
-#import "JSObjectionInjector.h"
-#import "JSObjection.h"
-#import "NSObject+Objection.h"
+#import "ApplauseJSObjectionUtils.h"
+#import "ApplauseJSObjectionInjector.h"
+#import "ApplauseJSObjection.h"
+#import "NSObject+ApplauseObjection.h"
 static NSString *const JSObjectionException = @"JSObjectionException";
 
-NSString *const JSObjectionInitializerKey = @"initializer";
-NSString *const JSObjectionDefaultArgumentsKey = @"arguments";
+NSString *const ApplauseJSObjectionInitializerKey = @"initializer";
+NSString *const ApplauseJSObjectionDefaultArgumentsKey = @"arguments";
 
-static JSObjectionPropertyInfo FindClassOrProtocolForProperty(objc_property_t property) {
+static ApplauseJSObjectionPropertyInfo FindClassOrProtocolForProperty(objc_property_t property) {
     NSString *attributes = [NSString stringWithCString: property_getAttributes(property) encoding: NSASCIIStringEncoding];  
     NSString *propertyName = [NSString stringWithCString:property_getName(property) encoding:NSASCIIStringEncoding];
 
@@ -26,16 +26,16 @@ static JSObjectionPropertyInfo FindClassOrProtocolForProperty(objc_property_t pr
 
     NSString *classOrProtocolName = [startOfClassName substringToIndex:endRange.location];
     id classOrProtocol = nil;
-    JSObjectionPropertyInfo propertyInfo;
+    ApplauseJSObjectionPropertyInfo propertyInfo;
 
     if ([classOrProtocolName hasPrefix:@"<"] && [classOrProtocolName hasSuffix:@">"]) {
         classOrProtocolName = [classOrProtocolName stringByReplacingOccurrencesOfString:@"<" withString:@""];
         classOrProtocolName = [classOrProtocolName stringByReplacingOccurrencesOfString:@">" withString:@""];
         classOrProtocol = objc_getProtocol([classOrProtocolName UTF8String]);
-        propertyInfo.type = JSObjectionTypeProtocol;
+        propertyInfo.type = ApplauseJSObjectionTypeProtocol;
     } else {
         classOrProtocol = NSClassFromString(classOrProtocolName);
-        propertyInfo.type = JSObjectionTypeClass;
+        propertyInfo.type = ApplauseJSObjectionTypeClass;
     }
 
     if(!classOrProtocol) {
@@ -59,9 +59,9 @@ static NSSet* BuildDependenciesForClass(Class klass, NSSet *requirements) {
 
 static NSDictionary* BuildInitializer(SEL selector, NSArray *defaultArguments) {
     return [NSDictionary dictionaryWithObjectsAndKeys:
-                NSStringFromSelector(selector), JSObjectionInitializerKey,
-                defaultArguments, JSObjectionDefaultArgumentsKey
-            , nil];
+        NSStringFromSelector(selector), ApplauseJSObjectionInitializerKey,
+        defaultArguments, ApplauseJSObjectionDefaultArgumentsKey
+        , nil];
 }
 
 static NSArray* TransformVariadicArgsToArray(va_list va_arguments) {
@@ -111,24 +111,24 @@ static id BuildObjectWithInitializer(Class klass, SEL initializer, NSArray *argu
     return nil;
 }
 
-static void InjectDependenciesIntoProperties(JSObjectionInjector *injector, Class klass, id object) {    
+static void InjectDependenciesIntoProperties(ApplauseJSObjectionInjector *injector, Class klass, id object) {
     if ([klass respondsToSelector:@selector(objectionRequires)]) {
         NSSet *properties = [klass performSelector:@selector(objectionRequires)];
         NSMutableDictionary *propertiesDictionary = [NSMutableDictionary dictionaryWithCapacity:properties.count];
         
         for (NSString *propertyName in properties) {
-            JSObjectionPropertyInfo propertyInfo = [JSObjection propertyForClass:klass andProperty:propertyName];
+            ApplauseJSObjectionPropertyInfo propertyInfo = [ApplauseJSObjection propertyForClass:klass andProperty:propertyName];
             id desiredClassOrProtocol = propertyInfo.value;
             // Ensure that the class is initialized before attempting to retrieve it.
             // Using +load would force all registered classes to be initialized so we are
             // lazily initializing them.
-            if (propertyInfo.type == JSObjectionTypeClass) {
+            if (propertyInfo.type == ApplauseJSObjectionTypeClass) {
                 [desiredClassOrProtocol class];
             }
             
             id theObject = [injector getObject:desiredClassOrProtocol];
             
-            if(theObject == nil && propertyInfo.type == JSObjectionTypeProtocol) {
+            if(theObject == nil && propertyInfo.type == ApplauseJSObjectionTypeProtocol) {
                 @throw [NSException exceptionWithName:@"JSObjectionException"
                                                reason:[NSString stringWithFormat:@"Cannot find an instance that is bound to the protocol '%@' to assign to the property '%@'", NSStringFromProtocol(desiredClassOrProtocol), propertyName]
                                              userInfo:nil];
@@ -147,7 +147,7 @@ static void InjectDependenciesIntoProperties(JSObjectionInjector *injector, Clas
     }
 }
 
-const struct JSObjectionUtils JSObjectionUtils = {
+const struct ApplauseJSObjectionUtils ApplauseJSObjectionUtils = {
     .findClassOrProtocolForProperty = FindClassOrProtocolForProperty,
     .propertyForClass = GetProperty,
     .buildDependenciesForClass = BuildDependenciesForClass,

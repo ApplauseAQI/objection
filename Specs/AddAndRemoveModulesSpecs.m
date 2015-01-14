@@ -5,12 +5,12 @@
 
 SPEC_BEGIN(AddAndRemoveModulesSpecs)
 __block SecondModule *module = nil;
-__block JSObjectionInjector *injector = nil;
+__block ApplauseJSObjectionInjector *injector = nil;
 
 beforeEach(^{
     module = [[SecondModule alloc] init];
     gEagerSingletonHook = NO;
-    injector = [JSObjection createInjector:module];
+    injector = [ApplauseJSObjection createInjector:module];
 });
 
 it(@"builds a new injector with new modules", ^{

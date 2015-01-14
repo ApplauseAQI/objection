@@ -11,23 +11,23 @@ beforeEach(^{
 
     module = [[MyModule alloc] initWithEngine:engine andGearBox:gearBox];    
     gEagerSingletonHook = NO;
-    JSObjectionInjector *injector = [JSObjection createInjector:module];
-    [JSObjection setDefaultInjector:injector];
+    ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector:module];
+    [ApplauseJSObjection setDefaultInjector:injector];
 });
 
 it(@"merges the modules instance bindings with the injector's context", ^{
-    assertThat([[JSObjection defaultInjector] getObject:[Engine class]], is(sameInstance(module.engine)));
+    assertThat([[ApplauseJSObjection defaultInjector] getObject:[Engine class]], is(sameInstance(module.engine)));
 });
 
 it(@"uses the module's bounded instance to fill out other objects dependencies", ^{
-    FiveSpeedCar *car = [[JSObjection defaultInjector] getObject:[FiveSpeedCar class]];
+    FiveSpeedCar *car = [[ApplauseJSObjection defaultInjector] getObject:[FiveSpeedCar class]];
 
     assertThat(car.engine, is(sameInstance(module.engine)));    
     assertThat(car.gearBox, is(sameInstance(module.gearBox)));    
 });
 
 it(@"supports binding an instance to a protocol", ^{
-    assertThat([[JSObjection defaultInjector] getObject:@protocol(GearBox)], is(sameInstance(module.gearBox)));    
+    assertThat([[ApplauseJSObjection defaultInjector] getObject:@protocol(GearBox)], is(sameInstance(module.gearBox)));
 });
 
 it(@"throws an exception if the instance does not conform to the protocol", ^{
@@ -50,7 +50,7 @@ it(@"throws an exception if an attempt is made to register an eager singleton th
         id<GearBox> gearBox = [[AfterMarketGearBox alloc] init];
         MyModule *module = [[MyModule alloc] initWithEngine:engine andGearBox:gearBox];    
         module.instrumentInvalidEagerSingleton = YES;
-        [JSObjection createInjector:module];
+        [ApplauseJSObjection createInjector:module];
     }) should] raiseWithReason:@"Unable to initialize eager singleton for the class 'Car' because it was never registered as a singleton"];
 
 });
@@ -60,12 +60,12 @@ describe(@"provider bindings", ^{
   
   beforeEach(^{
     providerModule = [[ProviderModule alloc] init];    
-    JSObjectionInjector *injector = [JSObjection createInjector:providerModule];
-    [JSObjection setDefaultInjector:injector];      
+    ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector:providerModule];
+    [ApplauseJSObjection setDefaultInjector:injector];
   });
   
   it(@"allows a bound protocol to be created through a provider", ^{
-    FiveSpeedCar *car = [[JSObjection defaultInjector] getObject:[Car class]];
+    FiveSpeedCar *car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
     
     assertThat(car, is(instanceOf([FiveSpeedCar class])));
     assertThat(car.brakes, is(instanceOf([Brakes class])));
@@ -73,7 +73,7 @@ describe(@"provider bindings", ^{
   });
   
   it(@"allows a bound class to be created through a provider", ^{
-    AfterMarketGearBox *gearBox = [[JSObjection defaultInjector] getObject:@protocol(GearBox)];      
+    AfterMarketGearBox *gearBox = [[ApplauseJSObjection defaultInjector] getObject:@protocol(GearBox)];
     assertThat(gearBox, is(instanceOf([AfterMarketGearBox class])));
   });
 });
@@ -83,12 +83,12 @@ describe(@"block bindings", ^{
   
   beforeEach(^{
     blockModule = [[BlockModule alloc] init];    
-    JSObjectionInjector *injector = [JSObjection createInjector:blockModule];
-    [JSObjection setDefaultInjector:injector];      
+    ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector:blockModule];
+    [ApplauseJSObjection setDefaultInjector:injector];
   });
   
   it(@"allows a bound protocol to be created using a block", ^{
-    FiveSpeedCar *car = [[JSObjection defaultInjector] getObject:[Car class]];
+    FiveSpeedCar *car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
     
     assertThat(car, is(instanceOf([FiveSpeedCar class])));
     assertThat(car.brakes, is(instanceOf([Brakes class])));
@@ -96,7 +96,7 @@ describe(@"block bindings", ^{
   });
   
   it(@"allows a bound class to be created using a block", ^{
-    AfterMarketGearBox *gearBox = [[JSObjection defaultInjector] getObject:@protocol(GearBox)];      
+    AfterMarketGearBox *gearBox = [[ApplauseJSObjection defaultInjector] getObject:@protocol(GearBox)];
     assertThat(gearBox, is(instanceOf([AfterMarketGearBox class])));
   });
 });
@@ -107,15 +107,15 @@ describe(@"block bindings properties nil", ^{
     beforeEach(^{
         blockModule = [[BlockModule alloc] init];
         blockModule.instrumentNilBlock = YES;
-        JSObjectionInjector *injector = [JSObjection createInjector:blockModule];
-        [JSObjection setDefaultInjector:injector];
+        ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector:blockModule];
+        [ApplauseJSObjection setDefaultInjector:injector];
     });
     
     it(@"allows a returned nil value from bindBlock", ^{
         // attempt to inject dependencies into Car via InjectDependenciesIntoProperties
         // ensure that Car is successfully injected and property brakes
         // returned from bindBlock is set as nil on Car if that was the intention
-        Car *car = [[JSObjection defaultInjector] getObject:[Car class]];
+        Car *car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
         assertThat(car, notNilValue());
         assertThat(car, is(instanceOf([SixSpeedCar class])));
         assertThat(car.brakes, nilValue());
@@ -124,7 +124,7 @@ describe(@"block bindings properties nil", ^{
 
 describe(@"meta class bindings", ^{
   it(@"supports binding to a meta class instance via a protocol", ^{
-    id<MetaCar> car = [[JSObjection defaultInjector] getObject:@protocol(MetaCar)];
+    id<MetaCar> car = [[ApplauseJSObjection defaultInjector] getObject:@protocol(MetaCar)];
     assertThat(car, is([Car class]));    
     assertThat([car manufacture], is(instanceOf([Car class])));
   });
@@ -144,7 +144,7 @@ describe(@"meta class bindings", ^{
 
 describe(@"class to protocol bindings", ^{
   it(@"supports associating a concrete class with a protocol", ^{
-    VisaCCProcessor *processor = [[JSObjection defaultInjector] getObject:@protocol(CreditCardProcessor)];
+    VisaCCProcessor *processor = [[ApplauseJSObjection defaultInjector] getObject:@protocol(CreditCardProcessor)];
     
     assertThat(processor, is(instanceOf([VisaCCProcessor class])));
     assertThat(processor.validator, is(instanceOf([CreditCardValidator class])));
@@ -153,7 +153,7 @@ describe(@"class to protocol bindings", ^{
 
 describe(@"subclass to superclass bindings", ^{
   it(@"supports associating a concrete class with a protocol", ^{
-    VisaCCProcessor *processor = [[JSObjection defaultInjector] getObjectWithArgs:[BaseCreditCardProcessor class], @"12414", nil];
+    VisaCCProcessor *processor = [[ApplauseJSObjection defaultInjector] getObjectWithArgs:[BaseCreditCardProcessor class], @"12414", nil];
     
     assertThat(processor, is(instanceOf([VisaCCProcessor class])));
     assertThat(processor.validator, is(instanceOf([CreditCardValidator class])));
@@ -165,13 +165,13 @@ describe(@"multiple modules", ^{
     beforeEach(^{
       FirstModule *first = [[FirstModule alloc] init];
       SecondModule *second = [[SecondModule alloc] init]; 
-      JSObjectionInjector *injector = [JSObjection createInjectorWithModules:first, second, nil];
-      [JSObjection setDefaultInjector:injector];
+      ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjectorWithModules:first, second, nil];
+      [ApplauseJSObjection setDefaultInjector:injector];
     });
   
     it(@"merges the binding in each module", ^{
-      AfterMarketGearBox *gearBox = [[JSObjection defaultInjector] getObject:@protocol(GearBox)];      
-      Car *car = [[JSObjection defaultInjector] getObject:[Car class]];
+      AfterMarketGearBox *gearBox = [[ApplauseJSObjection defaultInjector] getObject:@protocol(GearBox)];
+      Car *car = [[ApplauseJSObjection defaultInjector] getObject:[Car class]];
       
       assertThat(gearBox, is(instanceOf([AfterMarketGearBox class])));
       assertThat(car, is(instanceOf([FiveSpeedCar class])));
@@ -181,11 +181,11 @@ describe(@"multiple modules", ^{
 
 describe(@"scopes", ^{
     __block ScopeModule *scopeModule = nil;
-    __block JSObjectionInjector *injector = nil;
+    __block ApplauseJSObjectionInjector *injector = nil;
 
     beforeEach(^{
         scopeModule = [[ScopeModule alloc] init];
-        injector = [JSObjection createInjector:scopeModule];
+        injector = [ApplauseJSObjection createInjector:scopeModule];
     });
 
     it(@"can bind a class in singleton scope", ^{
@@ -201,11 +201,11 @@ describe(@"scopes", ^{
 
 describe(@"provider scopes", ^{
     __block ProviderScopeModule *providerScopeModule = nil;
-    __block JSObjectionInjector *injector = nil;
+    __block ApplauseJSObjectionInjector *injector = nil;
 
     beforeEach(^{
         providerScopeModule = [[ProviderScopeModule alloc] init];
-        injector = [JSObjection createInjector:providerScopeModule];
+        injector = [ApplauseJSObjection createInjector:providerScopeModule];
     });
 
     it(@"can bind a provider in singleton scope", ^{
@@ -220,11 +220,11 @@ describe(@"provider scopes", ^{
 
 describe(@"block scopes", ^{
     __block BlockScopeModule *blockScopeModule = nil;
-    __block JSObjectionInjector *injector = nil;
+    __block ApplauseJSObjectionInjector *injector = nil;
 
     beforeEach(^{
         blockScopeModule = [[BlockScopeModule alloc] init];
-        injector = [JSObjection createInjector:blockScopeModule];
+        injector = [ApplauseJSObjection createInjector:blockScopeModule];
     });
 
     it(@"can bind a block in singleton scope", ^{

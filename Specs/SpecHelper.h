@@ -8,7 +8,7 @@
 #import <OCHamcrest/OCHamcrest.h>
 #endif
 
-#import "Objection.h"
+#import "ApplauseObjection.h"
 #import "Kiwi.h"
 #import <Foundation/Foundation.h>
 
