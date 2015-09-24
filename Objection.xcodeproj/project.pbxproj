@@ -79,7 +79,6 @@
 		4B53383417AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.h in Copy Header Files */ = {isa = PBXBuildFile; fileRef = 4B53383117AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.h */; };
 		4B53383517AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53383117AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.h */; };
 		4B53383617AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B53383217AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m */; };
-		4B53383717AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Copy Header Files */ = {isa = PBXBuildFile; fileRef = 4B53383217AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m */; };
 		4B53383817AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B53383217AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m */; };
 		4B53383917AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B53383217AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m */; };
 		4B53383A17AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B53383217AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m */; };
@@ -198,7 +197,7 @@
 		4B25BE571291C58800821DC1 /* Copy Header Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal/${PRODUCT_NAME}.framework/Versions/A/Headers/";
+			dstPath = "${PROJECT_DIR}/build/Release-iphoneuniversal/${PRODUCT_NAME}.framework/Versions/A/Headers";
 			dstSubfolderSpec = 0;
 			files = (
 				4B9D311413DF79FE00C81C45 /* JSObjectionUtils.h in Copy Header Files */,
@@ -213,7 +212,6 @@
 				4B4B21A51342B78E00833077 /* JSObjectionEntry.h in Copy Header Files */,
 				4B81F8D0135D06A300221A88 /* JSObjectionProviderEntry.h in Copy Header Files */,
 				4B53383417AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.h in Copy Header Files */,
-				4B53383717AC1420004BDF83 /* JSObjectionRuntimePropertyReflector.m in Copy Header Files */,
 			);
 			name = "Copy Header Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -567,7 +565,7 @@
 			name = "Specs-iOS";
 			productName = "Specs-iOS";
 			productReference = 4B42580813F56CC0006BC001 /* Specs-iOS.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		4B42587413F56EA3006BC001 /* Specs-OSX */ = {
 			isa = PBXNativeTarget;
@@ -585,7 +583,7 @@
 			name = "Specs-OSX";
 			productName = "Specs-OSX";
 			productReference = 4B42587513F56EA3006BC001 /* Specs-OSX.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		4BED511512AA8B7A00CA6B36 /* Objection */ = {
 			isa = PBXNativeTarget;
@@ -738,7 +736,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphonesimulator -target ${PROJECT_NAME}-StaticLib -configuration ${CONFIGURATION} clean build\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphoneos -target ${PROJECT_NAME}-StaticLib -configuration ${CONFIGURATION} clean build";
+			shellScript = "xcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphonesimulator -target ${PROJECT_NAME}-StaticLib -configuration Release clean build\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphoneos -target ${PROJECT_NAME}-StaticLib -configuration Release clean build";
 		};
 		4B25BE511291C51E00821DC1 /* Build Universal Lib */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -752,7 +750,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-StaticLib.a\" &&\n\tDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-StaticLib.a\" &&\n\tUNIVERSAL_LIBRARY_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal\" &&\n\tUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\n\tFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\n\n# Create framework directory structure.\n\trm -rf \"${FRAMEWORK}\" &&\n\tmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\n\tmkdir -p \"${FRAMEWORK}/Versions/A/Headers\" &&\n\tmkdir -p \"${FRAMEWORK}/Versions/A/Resources\" &&\n\n# Generate universal binary from desktop, device, and simulator builds.\n\tlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\n\tcp \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}/Versions/A\" &&\n\tln -s \"A\" \"${FRAMEWORK}/Versions/Current\" &&\n\tln -s \"Versions/Current/Headers\" \"${FRAMEWORK}/Headers\" &&\n\tln -s \"Versions/Current/Resources\" \"${FRAMEWORK}/Resources\" &&\n\tln -s \"Versions/Current/${PRODUCT_NAME}\" \"${FRAMEWORK}/${PRODUCT_NAME}\" &&\n\tcp \"${SRCROOT}/${PROJECT_NAME}-Info.plist\" \"${FRAMEWORK}/Resources/Info.plist\"\n\n";
+			shellScript = "BUILD_DIR=\"${PROJECT_DIR}/build\" &&\nSIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/Release-iphonesimulator/lib${PROJECT_NAME}-StaticLib.a\" &&\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/Release-iphoneos/lib${PROJECT_NAME}-StaticLib.a\" &&\nUNIVERSAL_LIBRARY_DIR=\"${BUILD_DIR}/Release-iphoneuniversal\" &&\nUNIVERSAL_LIBRARY_PATH=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}\" &&\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${PRODUCT_NAME}.framework\" &&\n\n# Create framework directory structure.\nrm -rf \"${FRAMEWORK}\" &&\nmkdir -p \"${UNIVERSAL_LIBRARY_DIR}\" &&\nmkdir -p \"${FRAMEWORK}/Versions/A/Headers\" &&\nmkdir -p \"${FRAMEWORK}/Versions/A/Resources\" &&\n\n# Generate universal binary from desktop, device, and simulator builds.\nlipo \"${SIMULATOR_LIBRARY_PATH}\" \"${DEVICE_LIBRARY_PATH}\" -create -output \"${UNIVERSAL_LIBRARY_PATH}\" &&\n\n# Move files to appropriate locations in framework paths.\nmv \"${UNIVERSAL_LIBRARY_PATH}\" \"${FRAMEWORK}/Versions/A\" &&\nln -s \"A\" \"${FRAMEWORK}/Versions/Current\" &&\nln -s \"Versions/Current/Headers\" \"${FRAMEWORK}/Headers\" &&\nln -s \"Versions/Current/Resources\" \"${FRAMEWORK}/Resources\" &&\nln -s \"Versions/Current/${PRODUCT_NAME}\" \"${FRAMEWORK}/${PRODUCT_NAME}\" &&\ncp \"${SRCROOT}/${PROJECT_NAME}-Info.plist\" \"${FRAMEWORK}/Resources/Info.plist\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -912,6 +910,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fembed-bitcode";
 				PRODUCT_NAME = "Objection-StaticLib";
 				SDKROOT = iphoneos;
 			};
@@ -934,6 +933,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fembed-bitcode";
 				PRODUCT_NAME = "Objection-StaticLib";
 				SDKROOT = iphoneos;
 			};
