@@ -22,7 +22,7 @@ BOOL gEagerSingletonHook = NO;
 @end
 
 @implementation EagerSingleton
-objection_register_singleton(EagerSingleton)
+apl_objection_register_singleton(EagerSingleton)
 - (void)awakeFromObjection {
   gEagerSingletonHook = YES;
 }
@@ -67,7 +67,7 @@ objection_register_singleton(EagerSingleton)
 @end
 
 @implementation CarProvider
-- (id)provide:(JSObjectionInjector *)context arguments:(NSArray *)arguments
+- (id)provide:(ApplauseJSObjectionInjector *)context arguments:(NSArray *)arguments
 {
     Car *car = [context getObject:[FiveSpeedCar class]];
     car.engine = (id)@"my engine";
@@ -76,7 +76,7 @@ objection_register_singleton(EagerSingleton)
 @end
 
 @implementation GearBoxProvider
-- (id)provide:(JSObjectionInjector *)context arguments:(NSArray *)arguments
+- (id)provide:(ApplauseJSObjectionInjector *)context arguments:(NSArray *)arguments
 {
     return [[AfterMarketGearBox alloc] init];
 }
@@ -98,7 +98,7 @@ objection_register_singleton(EagerSingleton)
     NSString *myEngine = @"My Engine";
     Brakes *myBrakes = [[Brakes alloc] init];
 
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
         if (_instrumentNilBlock) {
             return (id)nil;
         }
@@ -106,7 +106,7 @@ objection_register_singleton(EagerSingleton)
         return (id)myBrakes;
     } toClass:[Brakes class]];
 
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
         Car *car = nil;
         if (_instrumentNilBlock) {
             car = [context getObject:[SixSpeedCar class]];
@@ -119,7 +119,7 @@ objection_register_singleton(EagerSingleton)
     } toClass:[Car class]];
 
     AfterMarketGearBox *gearBox = [[AfterMarketGearBox alloc] init];
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
         return (id)gearBox;
     } toProtocol:@protocol(GearBox)];
 }
@@ -136,9 +136,9 @@ objection_register_singleton(EagerSingleton)
 @end
 
 @implementation VisaCCProcessor
-objection_register_singleton(VisaCCProcessor)
-objection_initializer(initWithCreditCardNumber:, @"Default")
-objection_requires(@"validator")
+apl_objection_register_singleton(VisaCCProcessor)
+apl_objection_initializer(initWithCreditCardNumber:, @"Default")
+apl_objection_requires(@"validator")
 
 @synthesize validator = _validator;
 @synthesize CCNumber;
@@ -172,8 +172,8 @@ objection_requires(@"validator")
 @implementation ScopeModule
 
 - (void)configure {
-    [self bindClass:[VisaCCProcessor class] inScope:JSObjectionScopeNormal];
-    [self bindClass:[Car class] inScope:JSObjectionScopeSingleton];
+    [self bindClass:[VisaCCProcessor class] inScope:ApplauseJSObjectionScopeNormal];
+    [self bindClass:[Car class] inScope:ApplauseJSObjectionScopeSingleton];
     [self registerEagerSingleton:[Car class]];
 }
 @end
@@ -181,14 +181,14 @@ objection_requires(@"validator")
 @implementation BlockScopeModule
 
 - (void)configure {
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
         Car *car = [[Car alloc] init];
         return (id)car;
-    } toClass:[Car class] inScope:JSObjectionScopeSingleton];
+    } toClass:[Car class] inScope:ApplauseJSObjectionScopeSingleton];
 
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
         return [[AfterMarketGearBox alloc] init];
-    } toProtocol:@protocol(GearBox) inScope:JSObjectionScopeNormal];
+    } toProtocol:@protocol(GearBox) inScope:ApplauseJSObjectionScopeNormal];
 }
 
 @end
@@ -196,14 +196,14 @@ objection_requires(@"validator")
 @implementation ProviderScopeModule
 - (void)configure
 {
-    [self bindProvider:[[CarProvider alloc] init] toClass:[Car class] inScope:JSObjectionScopeSingleton];
-    [self bindProvider:[[GearBoxProvider alloc] init] toProtocol:@protocol(GearBox) inScope:JSObjectionScopeNormal];
+    [self bindProvider:[[CarProvider alloc] init] toClass:[Car class] inScope:ApplauseJSObjectionScopeSingleton];
+    [self bindProvider:[[GearBoxProvider alloc] init] toProtocol:@protocol(GearBox) inScope:ApplauseJSObjectionScopeNormal];
 }
 @end
 
 @implementation BlinkerProvider
 
--(id)provide:(JSObjectionInjector *)context arguments:(NSArray *)arguments {
+-(id)provide:(ApplauseJSObjectionInjector *)context arguments:(NSArray *)arguments {
     Blinker *blinker = [[Blinker alloc]init];
     blinker.speed = @11;
     return (id<Blinkable>)blinker;
@@ -221,13 +221,13 @@ objection_requires(@"validator")
     [self bind:_rightHeadlight toClass:[Headlight class] named:@"RightHeadlight"];
     [self bindClass:[HIDHeadlight class] toClass:[Headlight class] named:@"LeftHeadlight"];
     [self bindProvider:[[BlinkerProvider alloc]init] toProtocol:@protocol(Blinkable) named:@"RightBlinker"];
-    [self bindBlock:^(JSObjectionInjector *context){
+    [self bindBlock:^(ApplauseJSObjectionInjector *context){
         Blinker *blinker = [[Blinker alloc]init];
         blinker.speed = @1.092;
         return (id<Blinkable>)blinker;
     } toProtocol:@protocol(Blinkable) named:@"LeftBlinker"];
 
-    [self bindClass:[HIDHeadlight class] toClass:[Headlight class] inScope:JSObjectionScopeSingleton named:@"My HID Headlight" ];
+    [self bindClass:[HIDHeadlight class] toClass:[Headlight class] inScope:ApplauseJSObjectionScopeSingleton named:@"My HID Headlight" ];
 }
 
 -(id)initWithRightHeadlight:(Headlight *)rightHeadlight {

@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
-#import "JSObjectionEntry.h"
+#import "ApplauseJSObjectionEntry.h"
 
-@interface JSObjectionInjectorEntry : JSObjectionEntry
+@interface ApplauseJSObjectionInjectorEntry : ApplauseJSObjectionEntry
 
 @property (nonatomic, readonly) Class classEntry;
 

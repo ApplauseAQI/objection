@@ -17,7 +17,7 @@ Nothing in this version has changed that would cause those that are upgrading fr
 
 **[Changes](#changes)**
 
-1. Ad-Hoc initializers can be used via the JSObjectionInjector and JSObjectFactory
+1. Ad-Hoc initializers can be used via the ApplauseJSObjectionInjector and ApplauseJSObjectFactory
 
 # 1.6.1
 

@@ -8,7 +8,7 @@
 #import <OCHamcrest/OCHamcrest.h>
 #endif
 
-#import "Objection.h"
+#import "ApplauseObjection.h"
 #import <Quick/Quick.h>
 #import <Nimble/Nimble-Swift.h>
 #import <Nimble/Nimble.h>

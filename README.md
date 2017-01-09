@@ -23,7 +23,7 @@ Objection is a lightweight dependency injection framework for Objective-C for Ma
 For questions, visit the [mailing list](https://groups.google.com/forum/?fromgroups#!forum/objection-framework)
 ### Basic Usage
 
-A class can be registered with objection using the macros *objection_register* (optional) or *objection_register_singleton*. The *objection_requires* macro can be used to declare what dependencies objection should provide to all instances it creates of that class. *objection_requires* can be used safely with inheritance.
+A class can be registered with objection using the macros *apl_objection_register* (optional) or *apl_objection_register_singleton*. The *apl_objection_requires* macro can be used to declare what dependencies objection should provide to all instances it creates of that class. *apl_objection_requires* can be used safely with inheritance.
 
 #### Example
 ```objective-c
@@ -43,7 +43,7 @@ A class can be registered with objection using the macros *objection_register* (
 @property(nonatomic) BOOL awake;
 
 @implementation Car
-objection_requires(@"engine", @"brakes")
+apl_objection_requires(@"engine", @"brakes")
 @synthesize engine, brakes, awake;
 @end
 ```
@@ -55,7 +55,7 @@ You can alternatively use selectors to define dependencies. The compiler will ge
 
 ```objective-c
 @implementation Car
-objection_requires_sel(@selector(engine), @selector(brakes))
+apl_objection_requires_sel(@selector(engine), @selector(brakes))
 @synthesize engine, brakes, awake;
 @end
 ```
@@ -66,7 +66,7 @@ An object can be fetched from objection by creating an injector and then asking 
 
 ```objective-c
 - (void)someMethod {
-  JSObjectionInjector *injector = [JSObjection createInjector];
+  ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
   id car = [injector getObject:[Car class]];
 }
 ```
@@ -75,24 +75,24 @@ A default injector can be registered with Objection which can be used throughout
 
 ```objective-c    
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-  JSObjectionInjector *injector = [JSObjection createInjector];
-  [JSObjection setDefaultInjector:injector];
+  ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
+  [ApplauseJSObjection setDefaultInjector:injector];
 }
 
 - (void)viewDidLoad {
-  id myModel = [[JSObjection defaultInjector] getObject:[MyModel class]];
+  id myModel = [[ApplauseJSObjection defaultInjector] getObject:[MyModel class]];
 }
 ```
 
 #### Injecting dependencies
 
-There may be instances where an object is allocated outside of the injector's life cycle. If the object's class declared its dependencies using *objection_requires* an injector can satisfy its dependencies via the *injectDependencies:* method.
+There may be instances where an object is allocated outside of the injector's life cycle. If the object's class declared its dependencies using *apl_objection_requires* an injector can satisfy its dependencies via the *injectDependencies:* method.
 
 ```objective-c
 @implementation JSTableModel
-objection_requires(@"RESTClient")
+apl_objection_requires(@"RESTClient")
 - (void)awakeFromNib {
-  [[JSObjection defaultInjector] injectDependencies:self];
+  [[ApplauseJSObjection defaultInjector] injectDependencies:self];
 }
 @end
 ```
@@ -103,7 +103,7 @@ Objection has support for the subscripting operator to retrieve objects from the
 
 ```objective-c
 - (void)someMethod {
-  JSObjectionInjector *injector = [JSObjection createInjector];
+  ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
   id car = injector[[Car class]];
 }
 ```
@@ -117,7 +117,7 @@ If an object is interested in knowing when it has been fully instantiated by obj
 ```objective-c
 @implementation Car
 //...
-objection_register_singleton(Car)
+apl_objection_register_singleton(Car)
   - (void)awakeFromObjection {
     awake = YES;
   }
@@ -131,7 +131,7 @@ A class can get objects from the injector context through an object factory.
 ### Example
 ```objective-c
 @interface RequestDispatcher
-@property(nonatomic, strong) JSObjectFactory *objectFactory
+@property(nonatomic, strong) ApplauseJSObjectFactory *objectFactory
 @end
 
 @implementation RequestDispatcher
@@ -154,7 +154,7 @@ A module is a set of bindings which contributes additional configuration informa
 
 #### Example
 ```objective-c
-@interface MyAppModule : JSObjectionModule {
+@interface MyAppModule : ApplauseJSObjectionModule {
   
 }
 @end
@@ -168,8 +168,8 @@ A module is a set of bindings which contributes additional configuration informa
 
 @end
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-  JSObjectionInjector *injector = [JSObjection createInjector:[[MyAppModule alloc] init]];
-  [JSObjection setDefaultInjector:injector];
+  ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector:[[MyAppModule alloc] init]];
+  [ApplauseJSObjection setDefaultInjector:injector];
 }
 ```
 #### Meta Class Bindings
@@ -214,11 +214,11 @@ Occasionally you'll want to manually construct an object within Objection. Provi
       
 #### Example
 ```objective-c
-@interface CarProvider : NSObject <JSObjectionProvider>
+@interface CarProvider : NSObject <ApplauseJSObjectionProvider>
 @end
 
 @implementation CarProvider
-- (id)provide:(JSObjectionInjector *)context arguments:(NSArray *)arguments {
+- (id)provide:(ApplauseJSObjectionInjector *)context arguments:(NSArray *)arguments {
   // Manually build object
   return car;
 }
@@ -227,7 +227,7 @@ Occasionally you'll want to manually construct an object within Objection. Provi
 @implementation MyAppModule
 - (void)configure {
     [self bindProvider:[[CarProvider alloc] init] toClass:[Car class]];
-    [self bindBlock:^(JSObjectionInjector *context) {
+    [self bindBlock:^(ApplauseJSObjectionInjector *context) {
       // Manually build object
       return car;          
     } toClass:[Car class]];
@@ -243,15 +243,15 @@ A class can be scoped as a singleton in a module. Conversely, a registered singl
 ```objective-c
 @implementation MyAppModule
 - (void)configure {
-    [self bindClass:[Singleton class] inScope:JSObjectionScopeNormal];
-    [self bindClass:[Car class] inScope:JSObjectionScopeSingleton];
+    [self bindClass:[Singleton class] inScope:ApplauseJSObjectionScopeNormal];
+    [self bindClass:[Car class] inScope:ApplauseJSObjectionScopeSingleton];
 }
 @end
 ```
 
 ### Named Bindings
 
-Dependencies of the same class or protocol can be identified using the *objection_requires_names* macro, which takes a dictionary of names to properties as a parameter. 
+Dependencies of the same class or protocol can be identified using the *apl_objection_requires_names* macro, which takes a dictionary of names to properties as a parameter. 
 
 #### Example
 ```objective-c
@@ -261,8 +261,8 @@ Dependencies of the same class or protocol can be identified using the *objectio
 @end
 
 @implementation ShinyCar
-objection_register(ShinyCar)
-objection_requires_names((@{@"LeftHeadlight":@"leftHeadlight", @"RightHeadlight":@"rightHeadlight"}))
+apl_objection_register(ShinyCar)
+apl_objection_requires_names((@{@"LeftHeadlight":@"leftHeadlight", @"RightHeadlight":@"rightHeadlight"}))
 @synthesize leftHeadlight, rightHeadlight;
 @end
 
@@ -308,20 +308,20 @@ injector = [otherInjector withModule:[[Level18Module alloc] init]]
 
 ## Initializers
 
-By default, Objection allocates objects with the default initializer <code>init</code>. If you'd like to instantiate an object with an alternate ininitializer the <code>objection_initializer</code> macro can be used to do so. The macro supports passing in default arguments (scalar values are not currently supported) as well.
+By default, Objection allocates objects with the default initializer <code>init</code>. If you'd like to instantiate an object with an alternate ininitializer the <code>apl_objection_initializer</code> macro can be used to do so. The macro supports passing in default arguments (scalar values are not currently supported) as well.
       
 #### Default Arguments Example
 ```objective-c
 @implementation ViewController
-objection_initializer(initWithNibName:bundle:, @"ViewController")
+apl_objection_initializer(initWithNibName:bundle:, @"ViewController")
 @end
 ```
 
 ####  Custom Arguments Example
 ```objective-c
 @implementation ConfigurableCar
-objection_requires(@"engine", @"brakes")
-objection_initializer(initWithMake:model:)
+apl_objection_requires(@"engine", @"brakes")
+apl_objection_initializer(initWithMake:model:)
 
 @synthesize make;
 @synthesize model;
@@ -340,8 +340,8 @@ objection_initializer(initWithMake:model:)
 #### Class Method Initializer
 ```objective-c
 @implementation Truck
-objection_requires(@"engine", @"brakes")
-objection_initializer(truckWithMake:model:)
+apl_objection_requires(@"engine", @"brakes")
+apl_objection_initializer(truckWithMake:model:)
 + (instancetype)truckWithMake:(NSString *) make model: (NSString *)model {
   ...
 }

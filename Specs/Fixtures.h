@@ -69,10 +69,10 @@
 @property(nonatomic, strong) SingletonItem *singletonItem;
 @end
 
-@class JSObjectFactory;
+@class ApplauseJSObjectFactory;
 
 @interface JSObjectFactoryHolder : NSObject
-@property (nonatomic, strong) JSObjectFactory *objectFactory;
+@property (nonatomic, strong) ApplauseJSObjectFactory *objectFactory;
 @end
 
 @class SingletonBar;

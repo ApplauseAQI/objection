@@ -1,8 +1,8 @@
 #import "InitializerFixtures.h"
 
 @implementation Truck
-objection_register(Truck)
-objection_initializer(truck:, @"Chevy")
+apl_objection_register(Truck)
+apl_objection_initializer(truck:, @"Chevy")
 
 + (id)truck: (NSString *)name {
     Truck *truck = [[self alloc] init];
@@ -12,14 +12,14 @@ objection_initializer(truck:, @"Chevy")
 @end
 
 @implementation BadInitializer
-objection_register(BadInitializer)
-objection_initializer(initWithNonExistentInitializer)
+apl_objection_register(BadInitializer)
+apl_objection_initializer(initWithNonExistentInitializer)
 @end
 
 @implementation ViewController
-objection_register(ViewController)
-objection_requires(@"car")
-objection_initializer(initWithNibName:bundle:, @"MyNib")
+apl_objection_register(ViewController)
+apl_objection_requires(@"car")
+apl_objection_initializer(initWithNibName:bundle:, @"MyNib")
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super init])) {
@@ -38,9 +38,9 @@ objection_initializer(initWithNibName:bundle:, @"MyNib")
 @end
 
 @implementation ConfigurableCar
-objection_register(ConfigurableCar)
-objection_requires(@"engine")
-objection_initializer_sel(@selector(initWithModel:horsePower:andYear:))
+apl_objection_register(ConfigurableCar)
+apl_objection_requires(@"engine")
+apl_objection_initializer_sel(@selector(initWithModel:horsePower:andYear:))
 
 @synthesize car = _car;
 @synthesize engine = _engine;
@@ -61,6 +61,6 @@ objection_initializer_sel(@selector(initWithModel:horsePower:andYear:))
 @end
 
 @implementation FilterInitInitializer
-objection_initializer(init)
+apl_objection_initializer(init)
 
 @end

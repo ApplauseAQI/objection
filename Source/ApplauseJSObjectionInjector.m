@@ -1,21 +1,21 @@
-#import "JSObjectionInjector.h"
-#import "JSObjectionEntry.h"
-#import "JSObjectFactory.h"
-#import "JSObjectionUtils.h"
-#import "JSObjectionInjectorEntry.h"
+#import "ApplauseJSObjectionInjector.h"
+#import "ApplauseJSObjectionEntry.h"
+#import "ApplauseJSObjectFactory.h"
+#import "ApplauseJSObjectionUtils.h"
+#import "ApplauseJSObjectionInjectorEntry.h"
 
 #import <pthread.h>
 #import <objc/runtime.h>
 
-@interface __JSObjectionInjectorDefaultModule : JSObjectionModule
+@interface __ApplauseJSObjectionInjectorDefaultModule : ApplauseJSObjectionModule
 
-@property (nonatomic, weak) JSObjectionInjector *injector;
+@property (nonatomic, weak) ApplauseJSObjectionInjector *injector;
 
 @end
 
-@implementation __JSObjectionInjectorDefaultModule
+@implementation __ApplauseJSObjectionInjectorDefaultModule
 
-- (instancetype)initWithInjector:(JSObjectionInjector *)injector {
+- (instancetype)initWithInjector:(ApplauseJSObjectionInjector *)injector {
     if ((self = [super init])) {
         self.injector = injector;
     }
@@ -23,12 +23,12 @@
 }
 
 - (void)configure   {
-    [self bind:[[JSObjectFactory alloc] initWithInjector:self.injector] toClass:[JSObjectFactory class]];
+    [self bind:[[ApplauseJSObjectFactory alloc] initWithInjector:self.injector] toClass:[ApplauseJSObjectFactory class]];
 }
 
 @end
   
-@interface JSObjectionInjector() {
+@interface ApplauseJSObjectionInjector() {
   NSDictionary *_globalContext;
   NSMutableDictionary *_context;
   NSSet *_eagerSingletons;
@@ -37,11 +37,11 @@
 
 - (void)initializeEagerSingletons;
 - (void)configureDefaultModule;
-- (void)configureModule:(JSObjectionModule *)module;
+- (void)configureModule:(ApplauseJSObjectionModule *)module;
 
 @end
 
-@implementation JSObjectionInjector
+@implementation ApplauseJSObjectionInjector
 
 - (instancetype)initWithContext:(NSDictionary *)theGlobalContext {
     if ((self = [super init])) {
@@ -55,7 +55,7 @@
     return self;
 }
 
-- (instancetype)initWithContext:(NSDictionary *)theGlobalContext andModule:(JSObjectionModule *)theModule {
+- (instancetype)initWithContext:(NSDictionary *)theGlobalContext andModule:(ApplauseJSObjectionModule *)theModule {
     if ((self = [self initWithContext:theGlobalContext])) {
         [self configureModule:theModule];
         [self initializeEagerSingletons];
@@ -65,7 +65,7 @@
 
 - (instancetype)initWithContext:(NSDictionary *)theGlobalContext andModules:(NSArray *)theModules {
     if ((self = [self initWithContext:theGlobalContext])) {
-        for (JSObjectionModule *module in theModules) {
+        for (ApplauseJSObjectionModule *module in theModules) {
             [self configureModule:module];      
         }
         [self initializeEagerSingletons];
@@ -106,7 +106,7 @@
 }
 
 - (id)getObject:(id)classOrProtocol named:name arguments:(va_list)argList {
-    NSArray *arguments = JSObjectionUtils.transformVariadicArgsToArray(argList);
+    NSArray *arguments = ApplauseJSObjectionUtils.transformVariadicArgsToArray(argList);
     return [self getObject:classOrProtocol named:name argumentList:arguments];
 }
 
@@ -133,17 +133,17 @@
             key = [NSString stringWithFormat:@"%@:%@",key,name];
         }
         
-        id<JSObjectionEntry> injectorEntry = [_context objectForKey:key];
+        id<ApplauseJSObjectionEntry> injectorEntry = [_context objectForKey:key];
         injectorEntry.injector = self;
         
         if (!injectorEntry) {
-            id<JSObjectionEntry> entry = [_globalContext objectForKey:key];
+            id<ApplauseJSObjectionEntry> entry = [_globalContext objectForKey:key];
             if (entry) {
                 injectorEntry = [[entry class] entryWithEntry:entry];
                 injectorEntry.injector = self;
                 [_context setObject:injectorEntry forKey:key];
             } else if(isClass) {
-                injectorEntry = [JSObjectionInjectorEntry entryWithClass:classOrProtocol scope:JSObjectionScopeNormal];
+                injectorEntry = [ApplauseJSObjectionInjectorEntry entryWithClass:classOrProtocol scope:ApplauseJSObjectionScopeNormal];
                 injectorEntry.injector = self;
                 [_context setObject:injectorEntry forKey:key];
             }
@@ -172,17 +172,17 @@
 }
 
 
-- (id)withModule:(JSObjectionModule *)theModule {
+- (id)withModule:(ApplauseJSObjectionModule *)theModule {
     return [self withModuleCollection:[NSArray arrayWithObject:theModule]];    
 }
 
-- (id)withModules:(JSObjectionModule *)first, ... {
+- (id)withModules:(ApplauseJSObjectionModule *)first, ... {
     va_list va_modules;
     NSMutableArray *modules = [NSMutableArray arrayWithObject:first];
     va_start(va_modules, first);
     
-    JSObjectionModule *module;
-    while ((module = va_arg( va_modules, JSObjectionModule *) )) {
+    ApplauseJSObjectionModule *module;
+    while ((module = va_arg( va_modules, ApplauseJSObjectionModule *) )) {
         [modules addObject:module];
     }
     
@@ -219,8 +219,8 @@
 - (id)withoutModuleCollection:(NSArray *)moduleClasses {
     NSMutableArray *remainingModules = [NSMutableArray arrayWithArray:_modules];
     NSMutableArray *withDefaultModule = [NSMutableArray arrayWithArray:moduleClasses];
-    [withDefaultModule addObject:[__JSObjectionInjectorDefaultModule class]];
-    for (JSObjectionModule *module in _modules) {
+    [withDefaultModule addObject:[__ApplauseJSObjectionInjectorDefaultModule class]];
+    for (ApplauseJSObjectionModule *module in _modules) {
         for (Class moduleClass in withDefaultModule) {
             if([module isKindOfClass:moduleClass]) {
                 [remainingModules removeObject:module];
@@ -232,7 +232,7 @@
 
 
 - (void)injectDependencies:(id)object {
-    JSObjectionUtils.injectDependenciesIntoProperties(self, [object class], object);
+    ApplauseJSObjectionUtils.injectDependenciesIntoProperties(self, [object class], object);
 }
 
 - (NSArray *)modules {
@@ -245,17 +245,17 @@
 - (void)initializeEagerSingletons {
     for (NSString *eagerSingletonKey in _eagerSingletons) {
         id entry = [_context objectForKey:eagerSingletonKey] ?: [_globalContext objectForKey:eagerSingletonKey];
-        if ([entry lifeCycle] == JSObjectionScopeSingleton) {
+        if ([entry lifeCycle] == ApplauseJSObjectionScopeSingleton) {
             [self getObject:NSClassFromString(eagerSingletonKey)];      
         } else {
-            @throw [NSException exceptionWithName:@"JSObjectionException" 
+            @throw [NSException exceptionWithName:@"ApplauseJSObjectionException"
                                            reason:[NSString stringWithFormat:@"Unable to initialize eager singleton for the class '%@' because it was never registered as a singleton", eagerSingletonKey] 
                                          userInfo:nil];
         }
     }
 }
 
-- (void)configureModule:(JSObjectionModule *)module {
+- (void)configureModule:(ApplauseJSObjectionModule *)module {
     [_modules addObject:module];
     [module configure];
     NSSet *mergedSet = [module.eagerSingletons setByAddingObjectsFromSet:_eagerSingletons];
@@ -264,7 +264,7 @@
 }
 
 - (void)configureDefaultModule {
-    __JSObjectionInjectorDefaultModule *module = [[__JSObjectionInjectorDefaultModule alloc] initWithInjector:self];
+    __ApplauseJSObjectionInjectorDefaultModule *module = [[__ApplauseJSObjectionInjectorDefaultModule alloc] initWithInjector:self];
     [self configureModule:module];
 }
 

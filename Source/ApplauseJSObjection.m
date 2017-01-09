@@ -1,19 +1,19 @@
-#import "JSObjection.h"
+#import "ApplauseJSObjection.h"
 #import <pthread.h>
-#import "JSObjectionInjectorEntry.h"
-#import "JSObjectionRuntimePropertyReflector.h"
+#import "ApplauseJSObjectionInjectorEntry.h"
+#import "ApplauseJSObjectionRuntimePropertyReflector.h"
 
 static NSMutableDictionary *gObjectionContext;
 static pthread_mutex_t gObjectionMutex;
-static JSObjectionInjector *gGlobalInjector;
-static id<JSObjectionPropertyReflector> gPropertyReflector;
+static ApplauseJSObjectionInjector *gGlobalInjector;
+static id<ApplauseJSObjectionPropertyReflector> gPropertyReflector;
 
-@implementation JSObjection
+@implementation ApplauseJSObjection
 
-+ (JSObjectionInjector *)createInjector:(JSObjectionModule *)module {
++ (ApplauseJSObjectionInjector *)createInjector:(ApplauseJSObjectionModule *)module {
         pthread_mutex_lock(&gObjectionMutex);
         @try {
-            return [[JSObjectionInjector alloc] initWithContext:gObjectionContext andModule:module];
+            return [[ApplauseJSObjectionInjector alloc] initWithContext:gObjectionContext andModule:module];
         }
         @finally {
             pthread_mutex_unlock(&gObjectionMutex); 
@@ -22,10 +22,10 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
         return nil;
 }
 
-+ (JSObjectionInjector *)createInjectorWithModulesArray:(NSArray *)modules {
++ (ApplauseJSObjectionInjector *)createInjectorWithModulesArray:(NSArray *)modules {
     pthread_mutex_lock(&gObjectionMutex);
     @try {
-        return [[JSObjectionInjector alloc] initWithContext:gObjectionContext andModules:modules];
+        return [[ApplauseJSObjectionInjector alloc] initWithContext:gObjectionContext andModules:modules];
     }
     @finally {
         pthread_mutex_unlock(&gObjectionMutex);
@@ -34,13 +34,13 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
     return nil;
 }
 
-+ (JSObjectionInjector *)createInjectorWithModules:(JSObjectionModule *)first, ... {
++ (ApplauseJSObjectionInjector *)createInjectorWithModules:(ApplauseJSObjectionModule *)first, ... {
     va_list va_modules;
     NSMutableArray *modules = [NSMutableArray arrayWithObject:first];
     va_start(va_modules, first);
 
-    JSObjectionModule *module;
-    while ((module = va_arg( va_modules, JSObjectionModule *) )) {
+    ApplauseJSObjectionModule *module;
+    while ((module = va_arg( va_modules, ApplauseJSObjectionModule *) )) {
         [modules addObject:module];
     }
 
@@ -48,10 +48,10 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
     return [self createInjectorWithModulesArray:modules];
 }
 
-+ (JSObjectionInjector *)createInjector {
++ (ApplauseJSObjectionInjector *)createInjector {
     pthread_mutex_lock(&gObjectionMutex);
     @try {
-        return [[JSObjectionInjector alloc] initWithContext:gObjectionContext];
+        return [[ApplauseJSObjectionInjector alloc] initWithContext:gObjectionContext];
     }
     @finally {
         pthread_mutex_unlock(&gObjectionMutex); 
@@ -61,9 +61,9 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
 }
 
 + (void)initialize {
-    if (self == [JSObjection class]) {
+    if (self == [ApplauseJSObjection class]) {
         gObjectionContext = [[NSMutableDictionary alloc] init];
-        gPropertyReflector = [[JSObjectionRuntimePropertyReflector alloc] init];
+        gPropertyReflector = [[ApplauseJSObjectionRuntimePropertyReflector alloc] init];
         pthread_mutexattr_t mutexattr;
         pthread_mutexattr_init(&mutexattr);
         pthread_mutexattr_settype(&mutexattr, PTHREAD_MUTEX_RECURSIVE);
@@ -74,12 +74,12 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
 
 + (void)registerClass:(Class)theClass scope:(JSObjectionScope)scope {
     pthread_mutex_lock(&gObjectionMutex);
-    if (scope != JSObjectionScopeSingleton && scope != JSObjectionScopeNormal) {
+    if (scope != ApplauseJSObjectionScopeSingleton && scope != ApplauseJSObjectionScopeNormal) {
         @throw [NSException exceptionWithName:@"JSObjectionInjectorException" reason:@"Invalid Instantiation Rule" userInfo:nil];
     }
 
     if (theClass && [gObjectionContext objectForKey:NSStringFromClass(theClass)] == nil) {
-        [gObjectionContext setObject:[JSObjectionInjectorEntry entryWithClass:theClass scope:scope] forKey:NSStringFromClass(theClass)];
+        [gObjectionContext setObject:[ApplauseJSObjectionInjectorEntry entryWithClass:theClass scope:scope] forKey:NSStringFromClass(theClass)];
     } 
     pthread_mutex_unlock(&gObjectionMutex);
 }
@@ -90,21 +90,21 @@ static id<JSObjectionPropertyReflector> gPropertyReflector;
     pthread_mutex_unlock(&gObjectionMutex);
 }
 
-+ (void)setDefaultInjector:(JSObjectionInjector *)anInjector {
++ (void)setDefaultInjector:(ApplauseJSObjectionInjector *)anInjector {
     if (gGlobalInjector != anInjector) {
         gGlobalInjector = anInjector;
     }
 }
 
-+ (JSObjectionInjector *)defaultInjector {  
++ (ApplauseJSObjectionInjector *)defaultInjector {
     return gGlobalInjector;
 }
 
-+ (JSObjectionPropertyInfo)propertyForClass:(Class)theClass andProperty:(NSString *)propertyName {
++ (ApplauseJSObjectionPropertyInfo)propertyForClass:(Class)theClass andProperty:(NSString *)propertyName {
     return [gPropertyReflector propertyForClass:theClass andProperty: propertyName];
 }
 
-+ (void)setPropertyReflector:(id<JSObjectionPropertyReflector>)reflector {
++ (void)setPropertyReflector:(id<ApplauseJSObjectionPropertyReflector>)reflector {
     if(gPropertyReflector != reflector) {
         gPropertyReflector = reflector;
     }

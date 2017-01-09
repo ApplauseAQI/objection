@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@interface NSObject(JSObjection)
+@interface NSObject(ApplauseObjection)
 
 - (void)awakeFromObjection;
 

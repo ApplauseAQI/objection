@@ -6,9 +6,9 @@
 @end
 
 @implementation Person
-objection_register(Person)
-objection_requires(@"attributes")
-objection_requires_names((@{@"NamedAttributes":@"namedAttributes"}))
+apl_objection_register(Person)
+apl_objection_requires(@"attributes")
+apl_objection_requires_names((@{@"NamedAttributes":@"namedAttributes"}))
 @end
 
 @interface Programmer : Person
@@ -17,9 +17,9 @@ objection_requires_names((@{@"NamedAttributes":@"namedAttributes"}))
 @end
 
 @implementation Programmer
-objection_register(Programmer)
-objection_requires(@"favoriteLanguages")
-objection_requires_names((@{@"FavoriteBooks":@"favoriteBooks"}))
+apl_objection_register(Programmer)
+apl_objection_requires(@"favoriteLanguages")
+apl_objection_requires_names((@{@"FavoriteBooks":@"favoriteBooks"}))
 @end
 
 @interface NoInheritance : NSObject
@@ -28,20 +28,20 @@ objection_requires_names((@{@"FavoriteBooks":@"favoriteBooks"}))
 @end
 
 @implementation NoInheritance
-objection_register(NoInheritance)
-objection_requires(@"something")
-objection_requires_names((@{@"SomethingElse":@"somethingElse"}))
+apl_objection_register(NoInheritance)
+apl_objection_requires(@"something")
+apl_objection_requires_names((@{@"SomethingElse":@"somethingElse"}))
 @end
 
 QuickSpecBegin(InheritanceSpecs)
 
 beforeEach(^{
-      JSObjectionInjector *injector = [JSObjection createInjector];
-      [JSObjection setDefaultInjector:injector];
+      ApplauseJSObjectionInjector *injector = [ApplauseJSObjection createInjector];
+      [ApplauseJSObjection setDefaultInjector:injector];
 });
 
 it(@"coalesces dependencies from parent to child", ^{
-      Programmer *programmer = [[JSObjection defaultInjector] getObject:[Programmer class]];
+      Programmer *programmer = [[ApplauseJSObjection defaultInjector] getObject:[Programmer class]];
       assertThat(programmer, is(notNilValue()));
       assertThat(programmer.favoriteLanguages, is(notNilValue()));
       assertThat(programmer.favoriteBooks, is(notNilValue()));
@@ -50,7 +50,7 @@ it(@"coalesces dependencies from parent to child", ^{
 });
 
 it(@"does not throw a fit if the base class does not implement .objectionRequires", ^{
-      NoInheritance *noParentObjectWithRequires = [[JSObjection defaultInjector] getObject:[NoInheritance class]];
+      NoInheritance *noParentObjectWithRequires = [[ApplauseJSObjection defaultInjector] getObject:[NoInheritance class]];
       assertThat(noParentObjectWithRequires.something, is(notNilValue()));
       assertThat(noParentObjectWithRequires.somethingElse, is(notNilValue()));
 });

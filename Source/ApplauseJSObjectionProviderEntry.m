@@ -1,18 +1,18 @@
-#import "JSObjectionProviderEntry.h"
+#import "ApplauseJSObjectionProviderEntry.h"
 
-@interface JSObjectionProviderEntry () {
-  id<JSObjectionProvider> _provider;
-  id(^_block)(JSObjectionInjector *context);
+@interface ApplauseJSObjectionProviderEntry () {
+  id<ApplauseJSObjectionProvider> _provider;
+  id(^_block)(ApplauseJSObjectionInjector *context);
   JSObjectionScope _lifeCycle;
   id _storageCache;
 }
 
 @end
 
-@implementation JSObjectionProviderEntry
+@implementation ApplauseJSObjectionProviderEntry
 @synthesize lifeCycle = _lifeCycle;
 
-- (id)initWithProvider:(id<JSObjectionProvider>)theProvider lifeCycle:(JSObjectionScope)theLifeCycle {
+- (id)initWithProvider:(id<ApplauseJSObjectionProvider>)theProvider lifeCycle:(JSObjectionScope)theLifeCycle {
     if ((self = [super init])) {
         _provider = theProvider;
         _lifeCycle = theLifeCycle;
@@ -22,7 +22,7 @@
     return self;
 }
 
-- (id)initWithBlock:(id(^)(JSObjectionInjector *context))theBlock lifeCycle:(JSObjectionScope)theLifeCycle {
+- (id)initWithBlock:(id(^)(ApplauseJSObjectionInjector *context))theBlock lifeCycle:(JSObjectionScope)theLifeCycle {
     if ((self = [super init])) {
         _block = [theBlock copy];
         _lifeCycle = theLifeCycle;
@@ -33,7 +33,7 @@
 }
 
 - (id)extractObject:(NSArray *)arguments {
-    if (self.lifeCycle == JSObjectionScopeNormal || !_storageCache) {
+    if (self.lifeCycle == ApplauseJSObjectionScopeNormal || !_storageCache) {
         return [self buildObject:arguments];
     }
 
@@ -52,7 +52,7 @@
     else {
         objectUnderConstruction = [_provider provide:self.injector arguments:arguments];
     }
-    if (self.lifeCycle == JSObjectionScopeSingleton) {
+    if (self.lifeCycle == ApplauseJSObjectionScopeSingleton) {
         _storageCache = objectUnderConstruction;
     }
     return objectUnderConstruction;

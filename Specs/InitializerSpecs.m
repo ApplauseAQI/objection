@@ -2,10 +2,10 @@
 #import "InitializerFixtures.h"
 
 QuickSpecBegin(InitializerSpecs)
-__block JSObjectionInjector *injector = nil;
+__block ApplauseJSObjectionInjector *injector = nil;
 
 beforeEach(^{
-    injector = [JSObjection createInjector];
+    injector = [ApplauseJSObjection createInjector];
 });
 
 it(@"instantiates the object with the default initializer arguments", ^{

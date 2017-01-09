@@ -1,12 +1,12 @@
-#import "JSObjectionBindingEntry.h"
+#import "ApplauseJSObjectionBindingEntry.h"
 
-@interface JSObjectionBindingEntry () {
+@interface ApplauseJSObjectionBindingEntry () {
   id _instance;
 }
 
 @end
 
-@implementation JSObjectionBindingEntry
+@implementation ApplauseJSObjectionBindingEntry
 
 - (instancetype)initWithObject:(id)theObject {
     if ((self = [super init])) {
@@ -20,7 +20,7 @@
 }
 
 - (JSObjectionScope)lifeCycle {
-    return JSObjectionScopeSingleton;
+    return ApplauseJSObjectionScopeSingleton;
 }
 
 - (void)dealloc {

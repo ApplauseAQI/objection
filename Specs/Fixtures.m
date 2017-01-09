@@ -1,9 +1,9 @@
 #import "Fixtures.h"
-#import "Objection.h"
+#import "ApplauseObjection.h"
 #import "CircularDependencyFixtures.h"
 
 @implementation Engine
-objection_register(Engine)
+apl_objection_register(Engine)
 @synthesize awake;
 
 - (void) awakeFromObjection {
@@ -17,7 +17,7 @@ objection_register(Engine)
 
 
 @implementation Car
-objection_register(Car)
+apl_objection_register(Car)
 
 @synthesize engine, brakes, awake;
 
@@ -25,91 +25,91 @@ objection_register(Car)
   awake = YES;
 }
 
-objection_requires(@"engine", @"brakes")
+apl_objection_requires(@"engine", @"brakes")
 @end
 
 @implementation UnregisteredCar
-objection_requires(@"engine")
+apl_objection_requires(@"engine")
 @synthesize engine;
 @end
 
 @implementation FiveSpeedCar
-objection_register(FiveSpeedCar)
+apl_objection_register(FiveSpeedCar)
 
 @synthesize gearBox;
 
-objection_requires(@"gearBox")
+apl_objection_requires(@"gearBox")
 @end
 
 @implementation SixSpeedCar
-objection_register(SixSpeedCar)
+apl_objection_register(SixSpeedCar)
 @synthesize gearBox;
 @end
 
 @implementation CarFactory
-objection_register_singleton(CarFactory)
+apl_objection_register_singleton(CarFactory)
 @end
 
 @implementation SingletonItemHolder
 @synthesize singletonItem;
-objection_register(SingletonItemHolder)
-objection_requires(@"singletonItem")
+apl_objection_register(SingletonItemHolder)
+apl_objection_requires(@"singletonItem")
 @end
 
 @implementation SingletonItem
-objection_register_singleton(SingletonItem)
+apl_objection_register_singleton(SingletonItem)
 @end
 
 @implementation JSObjectFactoryHolder
-objection_register_singleton(JSObjectFactoryHolder)
-objection_requires(@"objectFactory")
+apl_objection_register_singleton(JSObjectFactoryHolder)
+apl_objection_requires(@"objectFactory")
 
 @synthesize objectFactory;
 @end
 
 @implementation SingletonFoo
-objection_register_singleton(SingletonFoo)
-objection_requires(@"bar")
+apl_objection_register_singleton(SingletonFoo)
+apl_objection_requires(@"bar")
 
 @synthesize bar;
 @end
 
 @implementation UnstoppableCar
-objection_requires_sel(@selector(engine))
+apl_objection_requires_sel(@selector(engine))
 @end
 
 @implementation Headlight
-objection_register(Headlight)
+apl_objection_register(Headlight)
 @end
 
 @implementation HIDHeadlight
-objection_register(HIDHeadlight)
+apl_objection_register(HIDHeadlight)
 @end
 
 @implementation ShinyCar
-objection_register(ShinyCar)
-objection_requires_names((@{@"LeftHeadlight":@"leftHeadlight", @"RightHeadlight":@"rightHeadlight"}))
-objection_requires(@"foglight")
+apl_objection_register(ShinyCar)
+apl_objection_requires_names((@{@"LeftHeadlight":@"leftHeadlight", @"RightHeadlight":@"rightHeadlight"}))
+apl_objection_requires(@"foglight")
 @synthesize leftHeadlight, rightHeadlight, foglight;
 @end
 
 @implementation Blinker
-objection_register(Blinker)
+apl_objection_register(Blinker)
 @synthesize speed;
 @end
 
 @implementation FlashyCar
-objection_register(FlashyCar)
-objection_requires_names((@{ @"LeftBlinker":@"leftBlinker",@"RightBlinker":@"rightBlinker"}))
+apl_objection_register(FlashyCar)
+apl_objection_requires_names((@{ @"LeftBlinker":@"leftBlinker",@"RightBlinker":@"rightBlinker"}))
 @synthesize leftBlinker, rightBlinker;
 @end
 
 @implementation Highbeam
-objection_register_singleton(Highbeam)
+apl_objection_register_singleton(Highbeam)
 @end
 
 @implementation BrightCar
-objection_register(BrightCar)
-objection_requires_names((@{ @"LeftHighbeam":@"leftHighbeam",@"RightHighbeam":@"rightHighbeam"}))
+apl_objection_register(BrightCar)
+apl_objection_requires_names((@{ @"LeftHighbeam":@"leftHighbeam",@"RightHighbeam":@"rightHighbeam"}))
 @synthesize leftHighbeam, rightHighbeam;
 @end

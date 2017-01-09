@@ -1,9 +1,9 @@
-#import "JSObjectionInjectorEntry.h"
-#import "JSObjection.h"
-#import "JSObjectionUtils.h"
-#import "NSObject+Objection.h"
+#import "ApplauseJSObjectionInjectorEntry.h"
+#import "ApplauseJSObjection.h"
+#import "ApplauseJSObjectionUtils.h"
+#import "NSObject+ApplauseObjection.h"
 
-@interface JSObjectionInjectorEntry() {
+@interface ApplauseJSObjectionInjectorEntry() {
   JSObjectionScope _lifeCycle;
   id _storageCache;
 }
@@ -15,7 +15,7 @@
 @end
 
 
-@implementation JSObjectionInjectorEntry
+@implementation ApplauseJSObjectionInjectorEntry
 
 @synthesize lifeCycle = _lifeCycle;
 @synthesize classEntry = _classEntry;
@@ -34,7 +34,7 @@
 }
 
 - (instancetype) extractObject:(NSArray *)arguments initializer:(SEL)initializer {
-    if (self.lifeCycle == JSObjectionScopeNormal || !_storageCache) {
+    if (self.lifeCycle == ApplauseJSObjectionScopeNormal || !_storageCache) {
         return [self buildObject:arguments initializer: initializer];
     }
     return _storageCache;
@@ -56,38 +56,38 @@
     id objectUnderConstruction = nil;
     
     if(initializer != nil) {
-        objectUnderConstruction = JSObjectionUtils.buildObjectWithInitializer(self.classEntry, initializer, arguments);
+        objectUnderConstruction = ApplauseJSObjectionUtils.buildObjectWithInitializer(self.classEntry, initializer, arguments);
     } else if ([self.classEntry respondsToSelector:@selector(objectionInitializer)]) {
-        objectUnderConstruction = JSObjectionUtils.buildObjectWithInitializer(self.classEntry, [self initializerForObject], [self argumentsForObject:arguments]);
+        objectUnderConstruction = ApplauseJSObjectionUtils.buildObjectWithInitializer(self.classEntry, [self initializerForObject], [self argumentsForObject:arguments]);
     } else {
         objectUnderConstruction = [[self.classEntry alloc] init];
     }
 
-    if (self.lifeCycle == JSObjectionScopeSingleton) {
+    if (self.lifeCycle == ApplauseJSObjectionScopeSingleton) {
         _storageCache = objectUnderConstruction;
     }
     
-    JSObjectionUtils.injectDependenciesIntoProperties(self.injector, self.classEntry, objectUnderConstruction);
+    ApplauseJSObjectionUtils.injectDependenciesIntoProperties(self.injector, self.classEntry, objectUnderConstruction);
     
     return objectUnderConstruction;
 }
 
 - (SEL)initializerForObject {
-    return NSSelectorFromString([[self.classEntry performSelector:@selector(objectionInitializer)] objectForKey:JSObjectionInitializerKey]);
+    return NSSelectorFromString([[self.classEntry performSelector:@selector(objectionInitializer)] objectForKey:ApplauseJSObjectionInitializerKey]);
 }
 
 - (NSArray *)argumentsForObject:(NSArray *)givenArguments {
-    return givenArguments.count > 0 ? givenArguments : [[self.classEntry performSelector:@selector(objectionInitializer)] objectForKey:JSObjectionDefaultArgumentsKey];
+    return givenArguments.count > 0 ? givenArguments : [[self.classEntry performSelector:@selector(objectionInitializer)] objectForKey:ApplauseJSObjectionDefaultArgumentsKey];
 }
 
 
 #pragma mark - Class Methods
 
 + (id)entryWithClass:(Class)theClass scope:(JSObjectionScope)theLifeCycle  {
-    return [[JSObjectionInjectorEntry alloc] initWithClass:theClass lifeCycle:theLifeCycle];
+    return [[ApplauseJSObjectionInjectorEntry alloc] initWithClass:theClass lifeCycle:theLifeCycle];
 }
 
-+ (id)entryWithEntry:(JSObjectionInjectorEntry *)entry {
-    return [[JSObjectionInjectorEntry alloc] initWithClass:entry.classEntry lifeCycle:entry.lifeCycle];  
++ (id)entryWithEntry:(ApplauseJSObjectionInjectorEntry *)entry {
+    return [[ApplauseJSObjectionInjectorEntry alloc] initWithClass:entry.classEntry lifeCycle:entry.lifeCycle];
 }
 @end

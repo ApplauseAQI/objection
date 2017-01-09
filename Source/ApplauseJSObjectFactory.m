@@ -1,9 +1,9 @@
-#import "JSObjectFactory.h"
-#import "Objection.h"
+#import "ApplauseJSObjectFactory.h"
+#import "ApplauseObjection.h"
 
-@implementation JSObjectFactory
+@implementation ApplauseJSObjectFactory
 
-- (instancetype)initWithInjector:(JSObjectionInjector *)injector {
+- (instancetype)initWithInjector:(ApplauseJSObjectionInjector *)injector {
     if ((self = [super init])) {
         _injector = injector;
     }

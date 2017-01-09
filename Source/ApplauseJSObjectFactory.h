@@ -1,12 +1,12 @@
 #import <Foundation/Foundation.h>
 
-@class JSObjectionInjector;
+@class ApplauseJSObjectionInjector;
 
-@interface JSObjectFactory : NSObject
+@interface ApplauseJSObjectFactory : NSObject
 
-@property (nonatomic, readonly, weak) JSObjectionInjector *injector;
+@property (nonatomic, readonly, weak) ApplauseJSObjectionInjector *injector;
 
-- (instancetype)initWithInjector:(JSObjectionInjector *)injector;
+- (instancetype)initWithInjector:(ApplauseJSObjectionInjector *)injector;
 - (id)getObject:(id)classOrProtocol;
 - (id)getObject:(id)classOrProtocol withArgumentList:(NSArray *)arguments;
 - (id)getObject:(id)classOrProtocol initializer:(SEL)initializer withArgumentList:(NSArray *)arguments;
