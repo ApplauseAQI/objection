@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'ApplauseObjection'
-  s.version      = '1.6.1'
+  s.version      = '1.6.2'
   s.summary      = 'A lightweight dependency injection framework for Objective-C.'
   s.author       = { 'Justin DeWind' => 'dewind@atomicobject.com' }
   s.source       = { :git => 'https://github.com/ApplauseAQI/objection.git', :tag => "#{s.version}" }
