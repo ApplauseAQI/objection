@@ -72,7 +72,7 @@ static id<ApplauseJSObjectionPropertyReflector> gPropertyReflector;
     }
 }
 
-+ (void)registerClass:(Class)theClass scope:(JSObjectionScope)scope {
++ (void)registerClass:(Class)theClass scope:(ApplauseJSObjectionScope)scope {
     pthread_mutex_lock(&gObjectionMutex);
     if (scope != ApplauseJSObjectionScopeSingleton && scope != ApplauseJSObjectionScopeNormal) {
         @throw [NSException exceptionWithName:@"JSObjectionInjectorException" reason:@"Invalid Instantiation Rule" userInfo:nil];

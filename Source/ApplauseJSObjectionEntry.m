@@ -13,7 +13,7 @@
     return entry;
 }
 
-- (JSObjectionScope)lifeCycle {
+- (ApplauseJSObjectionScope)lifeCycle {
     return ApplauseJSObjectionScopeNone;
 }
 @end

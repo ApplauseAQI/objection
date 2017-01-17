@@ -3,7 +3,7 @@
 @interface ApplauseJSObjectionProviderEntry () {
   id<ApplauseJSObjectionProvider> _provider;
   id(^_block)(ApplauseJSObjectionInjector *context);
-  JSObjectionScope _lifeCycle;
+  ApplauseJSObjectionScope _lifeCycle;
   id _storageCache;
 }
 
@@ -12,7 +12,7 @@
 @implementation ApplauseJSObjectionProviderEntry
 @synthesize lifeCycle = _lifeCycle;
 
-- (id)initWithProvider:(id<ApplauseJSObjectionProvider>)theProvider lifeCycle:(JSObjectionScope)theLifeCycle {
+- (id)initWithProvider:(id<ApplauseJSObjectionProvider>)theProvider lifeCycle:(ApplauseJSObjectionScope)theLifeCycle {
     if ((self = [super init])) {
         _provider = theProvider;
         _lifeCycle = theLifeCycle;
@@ -22,7 +22,7 @@
     return self;
 }
 
-- (id)initWithBlock:(id(^)(ApplauseJSObjectionInjector *context))theBlock lifeCycle:(JSObjectionScope)theLifeCycle {
+- (id)initWithBlock:(id(^)(ApplauseJSObjectionInjector *context))theBlock lifeCycle:(ApplauseJSObjectionScope)theLifeCycle {
     if ((self = [super init])) {
         _block = [theBlock copy];
         _lifeCycle = theLifeCycle;

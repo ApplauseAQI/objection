@@ -102,22 +102,22 @@
     [self bindProvider:provider toProtocol:aProtocol inScope:ApplauseJSObjectionScopeNormal named:name];
 }
 
-- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toClass:(Class)aClass inScope:(JSObjectionScope)scope {
+- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toClass:(Class)aClass inScope:(ApplauseJSObjectionScope)scope {
     [self bindProvider:provider toClass:aClass inScope:scope named:nil];
 }
 
-- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toClass:(Class)aClass inScope:(JSObjectionScope)scope
+- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toClass:(Class)aClass inScope:(ApplauseJSObjectionScope)scope
         named:(NSString *)name {
     NSString *key = [self classKey:aClass withName:name];
     ApplauseJSObjectionProviderEntry *entry = [[ApplauseJSObjectionProviderEntry alloc] initWithProvider:provider lifeCycle:scope];
     [_bindings setObject:entry forKey:key];
 }
 
-- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toProtocol:(Protocol *)aProtocol inScope:(JSObjectionScope)scope {
+- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toProtocol:(Protocol *)aProtocol inScope:(ApplauseJSObjectionScope)scope {
     [self bindProvider:provider toProtocol:aProtocol inScope:scope named:nil];
 }
 
-- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toProtocol:(Protocol *)aProtocol inScope:(JSObjectionScope)scope
+- (void)bindProvider:(id <ApplauseJSObjectionProvider>)provider toProtocol:(Protocol *)aProtocol inScope:(ApplauseJSObjectionScope)scope
         named:(NSString *)name {
     NSString *key = [self protocolKey:aProtocol withName:name];
     ApplauseJSObjectionProviderEntry *entry = [[ApplauseJSObjectionProviderEntry alloc] initWithProvider:provider lifeCycle:scope];
@@ -132,7 +132,7 @@
     [self bindClass:aClass toProtocol:aProtocol inScope:ApplauseJSObjectionScopeNormal named:name];
 }
 
-- (void)bindClass:(Class)aClass toProtocol:(Protocol *)aProtocol inScope:(JSObjectionScope)scope named:(NSString*)name{
+- (void)bindClass:(Class)aClass toProtocol:(Protocol *)aProtocol inScope:(ApplauseJSObjectionScope)scope named:(NSString*)name{
     __ApplauseJSClassProvider *provider = [[__ApplauseJSClassProvider alloc] initWithClass:aClass];
     [self bindProvider:provider toProtocol:aProtocol inScope:scope named:name];
 }
@@ -145,7 +145,7 @@
     [self bindClass:aClass toClass:toClass inScope:ApplauseJSObjectionScopeNormal named:name];
 }
 
-- (void)bindClass:(Class)aClass toClass:(Class)toClass inScope:(JSObjectionScope)scope named:(NSString*)name {
+- (void)bindClass:(Class)aClass toClass:(Class)toClass inScope:(ApplauseJSObjectionScope)scope named:(NSString*)name {
     __ApplauseJSClassProvider *provider = [[__ApplauseJSClassProvider alloc] initWithClass:aClass];
     [self bindProvider:provider toClass:toClass inScope:scope named:name];
 }
@@ -166,29 +166,29 @@
     [self bindBlock:block toProtocol:aProtocol inScope:ApplauseJSObjectionScopeNormal named:name];
 }
 
-- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *))block toClass:(Class)aClass inScope:(JSObjectionScope)scope {
+- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *))block toClass:(Class)aClass inScope:(ApplauseJSObjectionScope)scope {
     [self bindBlock:block toClass:aClass inScope:scope named:nil];
 }
 
-- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *context))block toClass:(Class)aClass inScope:(JSObjectionScope)scope
+- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *context))block toClass:(Class)aClass inScope:(ApplauseJSObjectionScope)scope
         named:(NSString *)name {
     NSString *key = [self classKey:aClass withName:name];
     ApplauseJSObjectionProviderEntry *entry = [[ApplauseJSObjectionProviderEntry alloc] initWithBlock:block lifeCycle:scope];
     [_bindings setObject:entry forKey:key];
 }
 
-- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *))block toProtocol:(Protocol *)aProtocol inScope:(JSObjectionScope)scope {
+- (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *))block toProtocol:(Protocol *)aProtocol inScope:(ApplauseJSObjectionScope)scope {
     [self bindBlock:block toProtocol:aProtocol inScope:scope named:nil];
 }
 
 - (void)bindBlock:(id (^)(ApplauseJSObjectionInjector *context))block toProtocol:(Protocol *)aProtocol
-        inScope:(JSObjectionScope)scope named:(NSString *)name {
+        inScope:(ApplauseJSObjectionScope)scope named:(NSString *)name {
     NSString *key = [self protocolKey:aProtocol withName:name];
     ApplauseJSObjectionProviderEntry *entry = [[ApplauseJSObjectionProviderEntry alloc] initWithBlock:block lifeCycle: scope];
     [_bindings setObject:entry forKey:key];
 }
 
-- (void)bindClass:(Class)aClass inScope:(JSObjectionScope)scope {
+- (void)bindClass:(Class)aClass inScope:(ApplauseJSObjectionScope)scope {
     [_bindings setObject:[ApplauseJSObjectionInjectorEntry entryWithClass:aClass scope:scope] forKey:[self classKey:aClass withName:nil]];
 }
 

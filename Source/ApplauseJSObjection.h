@@ -9,7 +9,7 @@
 + (ApplauseJSObjectionInjector *)createInjectorWithModulesArray:(NSArray *)modules;
 + (ApplauseJSObjectionInjector *)createInjector:(ApplauseJSObjectionModule *)module;
 + (ApplauseJSObjectionInjector *)createInjector;
-+ (void)registerClass:(Class)theClass scope:(JSObjectionScope)scope;
++ (void)registerClass:(Class)theClass scope:(ApplauseJSObjectionScope)scope;
 + (void)setDefaultInjector:(ApplauseJSObjectionInjector *)anInjector;
 + (ApplauseJSObjectionInjector *)defaultInjector;
 + (void)reset;

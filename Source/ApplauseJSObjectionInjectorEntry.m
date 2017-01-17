@@ -4,7 +4,7 @@
 #import "NSObject+ApplauseObjection.h"
 
 @interface ApplauseJSObjectionInjectorEntry() {
-  JSObjectionScope _lifeCycle;
+  ApplauseJSObjectionScope _lifeCycle;
   id _storageCache;
 }
 
@@ -23,7 +23,7 @@
 
 #pragma mark - Instance Methods
 
-- (instancetype)initWithClass:(Class)theClass lifeCycle:(JSObjectionScope)theLifeCycle {
+- (instancetype)initWithClass:(Class)theClass lifeCycle:(ApplauseJSObjectionScope)theLifeCycle {
   if ((self = [super init])) {
     _lifeCycle = theLifeCycle;
     _classEntry = theClass;
@@ -83,7 +83,7 @@
 
 #pragma mark - Class Methods
 
-+ (id)entryWithClass:(Class)theClass scope:(JSObjectionScope)theLifeCycle  {
++ (id)entryWithClass:(Class)theClass scope:(ApplauseJSObjectionScope)theLifeCycle  {
     return [[ApplauseJSObjectionInjectorEntry alloc] initWithClass:theClass lifeCycle:theLifeCycle];
 }
 

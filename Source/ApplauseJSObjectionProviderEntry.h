@@ -6,7 +6,7 @@
 
 @interface ApplauseJSObjectionProviderEntry : ApplauseJSObjectionEntry
 
-- (id)initWithProvider:(id<ApplauseJSObjectionProvider>)theProvider lifeCycle:(JSObjectionScope)theLifeCycle;
-- (id)initWithBlock:(id(^)(ApplauseJSObjectionInjector *context))theBlock lifeCycle:(JSObjectionScope)theLifeCycle;
+- (id)initWithProvider:(id<ApplauseJSObjectionProvider>)theProvider lifeCycle:(ApplauseJSObjectionScope)theLifeCycle;
+- (id)initWithBlock:(id(^)(ApplauseJSObjectionInjector *context))theBlock lifeCycle:(ApplauseJSObjectionScope)theLifeCycle;
 
 @end

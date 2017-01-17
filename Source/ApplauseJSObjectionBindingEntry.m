@@ -19,7 +19,7 @@
     return _instance;
 }
 
-- (JSObjectionScope)lifeCycle {
+- (ApplauseJSObjectionScope)lifeCycle {
     return ApplauseJSObjectionScopeSingleton;
 }
 

@@ -4,14 +4,14 @@ typedef enum {
     ApplauseJSObjectionScopeNone = -1,
     ApplauseJSObjectionScopeNormal,
     ApplauseJSObjectionScopeSingleton
-} JSObjectionScope;
+} ApplauseJSObjectionScope;
 
 
 @class ApplauseJSObjectionInjector, ApplauseJSObjectionEntry;
 
 @protocol ApplauseJSObjectionEntry<NSObject>
 
-@property (nonatomic, readonly) JSObjectionScope lifeCycle;
+@property (nonatomic, readonly) ApplauseJSObjectionScope lifeCycle;
 @property (nonatomic, assign) ApplauseJSObjectionInjector *injector;
 
 @required
