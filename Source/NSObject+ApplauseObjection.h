@@ -1,6 +1,17 @@
 #import <Foundation/Foundation.h>
 
-@interface NSObject(ApplauseObjection)
+@protocol ApplauseObjectionCreatable <NSObject>
+
+@optional
+
++ (NSDictionary *)objectionInitializer;
++ (NSSet *)objectionRequires;
++ (NSDictionary *)objectionRequiresNames;
+
+@end
+
+
+@interface NSObject(ApplauseObjection) <ApplauseObjectionCreatable>
 
 - (void)awakeFromObjection;
 
